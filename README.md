@@ -1,6 +1,16 @@
 # server-tools
 Some tools usefull for server administration
 
+# mirrorUpdater
+Create and maintain up-to-date an ArchLinux mirror.
+
+### Setup
+Change (or not) *source* and *lastupdate_url* and launch the script every hour by cron.
+That's all, you've got a working mirror.
+
+All you have to do is just a bit on configuration on your Apache/Nginx server
+
+
 # mirrorCheck
 Check if a specified ArchLinux mirror is syncing well.
 If not, send an email to specified address.
