@@ -5,7 +5,20 @@ Some tools usefull for server administration
 Check if a specified ArchLinux mirror is syncing well.
 If not, send an email to specified address.
 
-## Configuration
+### Setup
+To run _mirrorCheck_ you need:
+
+- python > 3.0.0
+
+- certify ( _python-certifi_ package)
+
+- urllib3 ( _python-urllib3_ package)
+
+- systemd (for logging)
+
+The rest of Python packages should be installed by default.
+
+### Configuration
 Configurations variables are following.
 
 - hostname : hostname which will be looked for in ArchLinux mirror's list.  Typically, it's your domain name
