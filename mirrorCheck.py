@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 import json.decoder
+
+import sys
 import urllib3
 import certifi
 import smtplib
@@ -9,10 +11,13 @@ from email.mime.text import MIMEText
 from systemd import journal
 
 # User variables
-hostname = 'yourdomain'
-receiverMail = 'your-receiving@mail.com'
-senderMail = 'your-sender@mail.com'
-mailServer = 'localhost'
+hostname = 'your.mirror.domain'
+receiverMail = 'receiver@email.com'
+senderMail = 'sender@from.email'
+mailServer = 'smtp.server.url'
+mailPort = 587
+username = 'username'
+password = 'password'
 logPrefix = '[mirrorCheck] '
 
 # Retrieving mirror status
@@ -38,8 +43,15 @@ for url in jsonStatus['urls']:
         msg['To'] = email.utils.formataddr(('Recipient', receiverMail))
         msg['From'] = email.utils.formataddr(('Author', senderMail))
         msg['Subject'] = 'Mirror out of sync'
-        server = smtplib.SMTP(mailServer)
-        try:
-            server.sendmail(senderMail, receiverMail, msg.as_string())
-        finally:
-            server.quit()
+
+        smtpRelay = smtplib.SMTP(mailServer, mailPort)
+        smtpRelay.ehlo()
+        smtpRelay.starttls()
+        smtpRelay.ehlo()
+        smtpRelay.login(username, password)
+
+        smtpRelay.sendmail(senderMail, receiverMail, msg.as_string())
+        smtpRelay.quit()
+
+        # One mail have been sent, exiting to avoid spam
+        sys.exit(0)
