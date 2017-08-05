@@ -38,7 +38,7 @@ for url in jsonStatus['urls']:
         exit(1)
     if hostname in url['url'] and url['completion_pct'] < 0.95:
         msg = MIMEText("ALARM!  Mirror is out-of-sync!!!\n\nAffected URL: " + url['url'] + "\n\nCurrent sync is " + str(
-            url['completion_pct'] * 100) + "%.\n\nLast sync occurred : " + url[
+            round(url['completion_pct'] * 100, 2)) + "%.\n\nLast sync occurred : " + url[
                            'last_sync'] + "\n\nFix is required ASAP!")
         msg['To'] = email.utils.formataddr(('Recipient', receiverMail))
         msg['From'] = email.utils.formataddr(('Author', senderMail))
