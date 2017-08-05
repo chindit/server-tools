@@ -31,7 +31,7 @@ for url in jsonStatus['urls']:
     if 'url' not in url or 'completion_pct' not in url:
         journal.send(logPrefix + 'URLs status are not in a correct format')
         exit(1)
-    if hostname in url['url'] and url['completion_pct'] < 0.9:
+    if hostname in url['url'] and url['completion_pct'] < 0.95:
         msg = MIMEText("ALARM!  Mirror is out-of-sync!!!\n\nAffected URL: " + url['url'] + "\n\nCurrent sync is " + str(
             url['completion_pct'] * 100) + "%.\n\nLast sync occurred : " + url[
                            'last_sync'] + "\n\nFix is required ASAP!")
