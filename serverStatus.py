@@ -9,6 +9,9 @@ from email.mime.text import MIMEText
 
 
 class ServerStatus:
+    """
+    EDIT THESE VARIABLES
+    """
     receiverMail = 'receiver@email.com'  # Receiver mail
     senderMail = 'sender@from.email'  # Sender mail
     senderName = 'Your name'  # Sender name
@@ -16,6 +19,11 @@ class ServerStatus:
     mailPort = 587  # Port (25 or 587 if using TLS)
     username = 'username'  # Username if TLS
     password = 'password'  # Password if TLS
+
+    """
+    DANGER ZONE
+    DO NOT EDIT CODE BELOW THIS LINE, UNLESS YOU KNOW WHAT YOU'RE DOING
+    """
 
     # Internal variable.  DO NOT EDIT
     relaunch_status = False

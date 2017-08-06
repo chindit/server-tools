@@ -48,3 +48,12 @@ Configurations variables are following.
 - password : password user to log into SMTP server
 
 - logPrefix : prefix used for logs in Systemd.  Change it if you want.
+
+
+# serverStatus
+Check overall status of running services
+If one service fails, it will try to restart it and will warn you,
+sending last logs if script is unable to restart service.
+
+Requirements are the same as for _mirrorCheck_, just edit the few config variables
+and script is OK.
