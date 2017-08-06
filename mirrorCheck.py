@@ -46,9 +46,10 @@ for url in jsonStatus['urls']:
 
         smtpRelay = smtplib.SMTP(mailServer, mailPort)
         smtpRelay.ehlo()
-        smtpRelay.starttls()
-        smtpRelay.ehlo()
-        smtpRelay.login(username, password)
+        if mailPort > 25:
+            smtpRelay.starttls()
+            smtpRelay.ehlo()
+            smtpRelay.login(username, password)
 
         smtpRelay.sendmail(senderMail, receiverMail, msg.as_string())
         smtpRelay.quit()

@@ -26,6 +26,8 @@ To run _mirrorCheck_ you need:
 
 - systemd (for logging)
 
+- smtplib (by default)
+
 The rest of Python packages should be installed by default.
 
 ### Configuration
@@ -38,5 +40,11 @@ Configurations variables are following.
 - senderMail : email address which will send the email.  Generally «something@hostname.com»
 
 - mailServer : server used to send mail.  Generally «localhost» if you have a postfix installed locally
+
+- mailPort : port used to connect to SMTP server. Generally 25.  If not 25, STARTTLS will be automatically enabled
+
+- username : username used to log into SMTP server
+
+- password : password user to log into SMTP server
 
 - logPrefix : prefix used for logs in Systemd.  Change it if you want.
