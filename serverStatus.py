@@ -1,23 +1,17 @@
 #!/usr/bin/python
 
 import subprocess
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta
+from time import sleep
 import smtplib
 import email.utils
 from email.mime.text import MIMEText
 
 
-def main():
-    start = ServerStatus()
-
-
-if __name__ == "__main__":
-    main()
-
-
 class ServerStatus:
     receiverMail = 'receiver@email.com'  # Receiver mail
     senderMail = 'sender@from.email'  # Sender mail
+    senderName = 'Your name'  # Sender name
     mailServer = 'smtp.server.url'  # SMTP server
     mailPort = 587  # Port (25 or 587 if using TLS)
     username = 'username'  # Username if TLS
@@ -25,6 +19,7 @@ class ServerStatus:
 
     # Internal variable.  DO NOT EDIT
     relaunch_status = False
+    overall_status = True
 
     def __init__(self):
         # Call for general status
@@ -58,6 +53,7 @@ class ServerStatus:
                             error_msg += "This message was returned while reloading service:\n"
                             error_msg += result + "\n\n"
                     else:
+                        self.overall_status = False
                         error_msg += '- ' + unit + ': FAILED on ' + datetime.now().strftime("%Y-%m-%d %H:%I:%S") + "\n"
                         error_msg += "Message returned while reloading unit:\n"
                         error_msg += result + "\n"
@@ -85,10 +81,10 @@ class ServerStatus:
         if unit_restart_result:
             relaunch_message = unit_restart_result
         unit_reload_process.stdout.close()
-        time.sleep(15)  # Waiting 15 sec for process to restart
+        sleep(15)  # Waiting 15 sec for process to restart
         unit_status_process = subprocess.Popen("systemctl status " + unit + " | grep Active: | awk '{print $2}'",
                                                shell=True, stdout=subprocess.PIPE)
-        if unit_status_process.stdout.read().decode('UTF-8').strip() != "active":
+        if unit_status_process.stdout.read().decode('UTF-8').strip() == "active":
             self.relaunch_status = True
         unit_status_process.stdout.close()
         return relaunch_message
@@ -96,15 +92,23 @@ class ServerStatus:
     def send_mail(self, message):
         msg = MIMEText(message)
         msg['To'] = email.utils.formataddr(('Recipient', self.receiverMail))
-        msg['From'] = email.utils.formataddr(('Author', self.senderMail))
-        msg['Subject'] = 'Mirror out of sync'
+        msg['From'] = email.utils.formataddr((self.senderName, self.senderMail))
+        msg['Subject'] = ("[INFO]" if self.overall_status else "[WARNING]") + 'Service failure'
 
-        smtpRelay = smtplib.SMTP(self.mailServer, self.mailPort)
-        smtpRelay.ehlo()
+        smtp_relay = smtplib.SMTP(self.mailServer, self.mailPort)
+        smtp_relay.ehlo()
         if self.mailPort > 25:
-            smtpRelay.starttls()
-            smtpRelay.ehlo()
-            smtpRelay.login(self.username, self.password)
+            smtp_relay.starttls()
+            smtp_relay.ehlo()
+            smtp_relay.login(self.username, self.password)
 
-        smtpRelay.sendmail(self.senderMail, self.receiverMail, msg.as_string())
-        smtpRelay.quit()
+        smtp_relay.sendmail(self.senderMail, self.receiverMail, msg.as_string())
+        smtp_relay.quit()
+
+
+def main():
+    ServerStatus()
+
+
+if __name__ == "__main__":
+    main()
