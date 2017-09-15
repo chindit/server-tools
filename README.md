@@ -1,5 +1,5 @@
 # server-tools
-Some tools usefull for server administration
+Some tools useful for server administration
 
 # mirrorUpdater
 Create and maintain up-to-date an ArchLinux mirror.
