@@ -49,6 +49,9 @@ Configurations variables are following.
 
 - logPrefix : prefix used for logs in Systemd.  Change it if you want.
 
+- mirrorDirectory : path to the mirror in local.  This path **MUST** end with a trailing slash and must contain both 
+*lastsync* and *lastupdate* files.
+
 
 # serverStatus
 Check overall status of running services
