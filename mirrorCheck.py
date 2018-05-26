@@ -10,6 +10,7 @@ import time
 import smtplib
 import email.utils
 from email.mime.text import MIMEText
+import subprocess
 from systemd import journal
 
 # User variables
@@ -59,6 +60,9 @@ for url in jsonStatus['urls']:
         smtpRelay.sendmail(senderMail, receiverMail, msg.as_string())
         smtpRelay.quit()
 
+        # Sending SMS
+        subprocess.call(['php', '/srv/http/smsSender/bin/console', 'sms:send', msg.as_string()])
+
         # One mail have been sent, exiting to avoid spam
         sys.exit(0)
 
@@ -89,3 +93,6 @@ if os.path.isfile(mirrorDirectory + 'lastsync') and os.path.isfile(mirrorDirecto
 
         smtpRelay.sendmail(senderMail, receiverMail, msg.as_string())
         smtpRelay.quit()
+
+        # Sending SMS
+        subprocess.call(['php', '/srv/http/smsSender/bin/console', 'sms:send', msg.as_string()])
