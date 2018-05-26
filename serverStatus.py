@@ -113,6 +113,9 @@ class ServerStatus:
         smtp_relay.sendmail(self.senderMail, self.receiverMail, msg.as_string())
         smtp_relay.quit()
 
+        # Sending also SMS
+        subprocess.call(['php', '/srv/http/smsSender/bin/console', 'sms:send', msg.as_string()])
+
 
 def main():
     ServerStatus()
