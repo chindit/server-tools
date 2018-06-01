@@ -95,4 +95,6 @@ if os.path.isfile(mirrorDirectory + 'lastsync') and os.path.isfile(mirrorDirecto
         smtpRelay.quit()
 
         # Sending SMS
-        subprocess.call(['php', '/srv/http/smsSender/bin/console', 'sms:send', msg.as_string()])
+        subprocess.call(['php', '/srv/http/smsSender/bin/console', 'sms:send', "ALARM! Mirror was not synced for more "
+                                                                               "than 24 hours or has not performed an"
+                                                                               " update in last 12 hours!"])
